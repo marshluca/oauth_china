@@ -22,13 +22,21 @@ module OauthChina
 
     def destroy
       #TODO
-    end
-
+    end 
+    
     def add_status(content, options = {})
-      options.merge!(:status => content)
       self.post("http://api.t.sina.com.cn/statuses/update.json", options)
     end
 
+    def friends(id, cursor = -1)  
+      body = self.get("http://api.t.sina.com.cn/statuses/friends/#{id}.json?cursor=#{cursor}&count=2")
+      puts body
+    end
+    
+    def verify
+      body = self.get("http://api.t.sina.com.cn/statuses/account/verify_credentials.json")
+      puts body
+    end 
 
     def upload_image(content, image_path, options = {})
       options = options.merge!(:status => content, :pic => File.open(image_path, "rb")).to_options

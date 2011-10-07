@@ -76,7 +76,10 @@ module OauthChina
     def authorize(options = {})
       return unless self.access_token.nil?
       token = self.request_token.get_access_token(options)
-      self.access_token ||= ::OAuth::AccessToken.new(consumer, token.token, token.secret)
+      # puts "authorize(options = {})"
+      #       puts token.params
+      #       self.access_token ||= ::OAuth::AccessToken.new(consumer, token.token, token.secret)
+      self.access_token = token
     end
 
   end
