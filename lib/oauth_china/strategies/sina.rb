@@ -29,15 +29,19 @@ module OauthChina
     end
 
     def friends(id, cursor = -1)  
-      body = self.get("http://api.t.sina.com.cn/statuses/friends/#{id}.json?cursor=#{cursor}&count=2")
-      puts body
+      body = self.get("http://api.t.sina.com.cn/statuses/friends/#{id}.json?cursor=#{cursor}&count=200").body
+      
     end
     
-    def verify
-      body = self.get("http://api.t.sina.com.cn/statuses/account/verify_credentials.json")
-      puts body
+    def friendships(source_id, target_id)  
+      body = self.get("http://api.t.sina.com.cn/friendships/show.json?source_id=#{source_id}&target_id=#{target_id}").body
+      
+    end
+    
+    def friendships_destroy(user_id)  
+      body = self.post("http://api.t.sina.com.cn/friendships/destroy/#{user_id}.json").body
     end 
-
+    
     def upload_image(content, image_path, options = {})
       options = options.merge!(:status => content, :pic => File.open(image_path, "rb")).to_options
       upload("http://api.t.sina.com.cn/statuses/upload.json", options)
