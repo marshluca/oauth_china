@@ -36,6 +36,20 @@ module OauthChina
       options.merge!(:content => content)
       self.post("http://open.t.qq.com/api/t/add", options)
     end
+    
+    def idollist(page, reqnum = 200) 
+      startindex = reqnum * (page-1)
+      self.get("http://open.t.qq.com/api/friends/idollist_s?format=json&reqnum=#{reqnum}&startindex=#{startindex}").body
+    end
+    
+    def fanslist(page, reqnum = 200) 
+      startindex = reqnum * (page-1)
+      self.get("http://open.t.qq.com/api/friends/fanslist_s?format=json&reqnum=#{reqnum}&startindex=#{startindex}").body
+    end
+    
+    def friends_del(name) 
+      self.post("http://open.t.qq.com/api/friends/del", {:format => "json", :name => name})
+    end
 
     #TODO
     def upload_image(content, image_path, options = {})

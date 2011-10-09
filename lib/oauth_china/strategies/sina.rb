@@ -33,6 +33,11 @@ module OauthChina
       
     end
     
+    def followers(id, cursor = -1)  
+      body = self.get("http://api.t.sina.com.cn/statuses/followers/#{id}.json?cursor=#{cursor}&count=200").body
+      
+    end
+    
     def friendships(source_id, target_id)  
       body = self.get("http://api.t.sina.com.cn/friendships/show.json?source_id=#{source_id}&target_id=#{target_id}").body
       
