@@ -34,6 +34,16 @@ module OauthChina
       
     end
     
+    def friends_v2(uid, cursor = -1)  
+      body = self.get("http://api.weibo.com/2/friendships/friends.json?uid=#{uid}&cursor=#{cursor}&count=200").body
+      
+    end
+    
+    def bilateral_ids(uid, page, api_key)  
+      body = self.get("http://api.weibo.com/2/friendships/friends.json?source=#{api_key}uid=#{uid}&page=#{page}&count=2000").body
+      
+    end
+    
     def followers(id, cursor = -1)  
       body = self.get("http://api.t.sina.com.cn/statuses/followers/#{id}.json?cursor=#{cursor}&count=200").body
       
@@ -42,6 +52,15 @@ module OauthChina
     def friendships(source_id, target_id)  
       body = self.get("http://api.t.sina.com.cn/friendships/show.json?source_id=#{source_id}&target_id=#{target_id}").body
       
+    end
+    
+    def short_url(long_urls, api_key = nil)  
+      long_urls_query = long_urls.to_a.map do |url|
+        "url_long=#{CGI.escape(url)}"
+      end.join("&")
+      url = "http://api.t.sina.com.cn/short_url/shorten.json?#{long_urls_query}"
+      url = "#{url}&source=#{api_key}" if api_key 
+      body = self.get(url).body
     end
     
     def friendships_destroy(user_id)  

@@ -40,11 +40,14 @@ module OauthChina
     def idollist(page, reqnum = 200) 
       startindex = reqnum * (page-1)
       self.get("http://open.t.qq.com/api/friends/idollist_s?format=json&reqnum=#{reqnum}&startindex=#{startindex}").body
-    end
+    end 
     
     def fanslist(page, reqnum = 200) 
       startindex = reqnum * (page-1)
       self.get("http://open.t.qq.com/api/friends/fanslist_s?format=json&reqnum=#{reqnum}&startindex=#{startindex}").body
+    end
+    
+    def check_fans(names)   self.get("http://open.t.qq.com/api/friends/check?format=json&names=#{names.join(",")}&flag=0").body
     end
     
     def friends_del(name) 
