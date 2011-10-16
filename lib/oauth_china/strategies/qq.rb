@@ -18,6 +18,19 @@ module OauthChina
     def name
       :qq
     end
+    
+    def sign_alone(method, url, token, params = {}) 
+      params = params.merge(:oauth_consumer_key => "db8b28a2b7354bd9800b1863484e78e8", :oauth_nonce => nonce, :oauth_signature_method => "HMAC-SHA1", :oauth_timestamp => Time.now.to_i.to_s, :oauth_version => "1.0", :oauth_token => token.token)
+      arr = []
+      params.keys.sort.each do |key|
+        arr << "#{URI::escape(key.to_s)}%3D#{URI::escape(params[key])}"
+      end
+      
+      signature_base_string = "#{method.upcase}&#{URI::escape(url.downcase)}&#{arr.join("%26")}"
+      _signature = Base64.encode64(Digest::HMAC.digest(signature_base_string, "5d31e867b0ea5397a0656b8720c5b006&#{token.secret}", ::Digest::SHA1)).chomp.gsub(/\n/, '')
+      params[:oauth_signature] = _signature
+      params
+    end
 
     #腾讯的nonce值必须32位随机字符串啊！
     def nonce
@@ -55,15 +68,16 @@ module OauthChina
     end
 
     #TODO
-    def upload_image(content, image_path, options = {})
-      add_status(content, options)
-    end
+    # def upload_image(content, image_path, options = {})
+    #       add_status(content, options)
+    #     end
 
-    #    def upload_image(content, image_path, options = {})
-    #      options = options.merge!(:content => content, :pic => File.open(image_path, "rb")).to_options
-    #
-    #      upload("http://open.t.qq.com/api/t/add_pic", options)
-    #    end
+    def upload_image(content, image_path, options = {})
+      # options = options.merge!(:content => content, :pic => File.open(image_path, "rb")).to_options
+      options = options.merge!(:content => content, :format => "json", :pic => File.open(image_path, "rb")).to_options 
+
+      qq_upload("http://open.t.qq.com/api/t/add_pic", options)
+    end
 
 
   end
