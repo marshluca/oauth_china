@@ -71,6 +71,10 @@ module OauthChina
     def authorize_url
       @authorize_url ||= request_token.authorize_url(:oauth_callback => URI.encode(callback))
     end
+    
+    def authorize_url_with_callback(_callback)
+      request_token.authorize_url(:oauth_callback => URI.encode(_callback))
+    end
 
     #QQ和新浪OAuth需要verifier参数，豆瓣不需要
     def authorize(options = {})

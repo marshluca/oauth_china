@@ -34,6 +34,10 @@ module OauthChina
       
     end
     
+    def user_info(id)  
+      body = self.get("http://api.t.sina.com.cn/users/show/#{id}.json").body 
+    end
+    
     def friends_v2(uid, cursor = -1)  
       body = self.get("http://api.weibo.com/2/friendships/friends.json?uid=#{uid}&cursor=#{cursor}&count=200").body
       
@@ -47,6 +51,10 @@ module OauthChina
     def followers(id, cursor = -1)  
       body = self.get("http://api.t.sina.com.cn/statuses/followers/#{id}.json?cursor=#{cursor}&count=200").body
       
+    end
+    
+    def follow(id)  
+      self.post("http://api.t.sina.com.cn/friendships/create/#{id}.json")
     end
     
     def friendships(source_id, target_id)  
