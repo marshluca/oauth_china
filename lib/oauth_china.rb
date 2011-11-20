@@ -58,14 +58,26 @@ module OauthChina
     def url; config['url']; end
     def callback; config["callback"]; end
 
+    def self.customized_config
+      @customized_config
+    end
+
+    def self.customized_config=(config)
+      @customized_config = config
+    end
+
     def config
-      CONFIG[self.name] ||= lambda do
-        require 'yaml'
-        filename = "#{Rails.root}/config/oauth/#{self.name}.yml"
-        file     = File.open(filename)
-        yaml     = YAML.load(file)
-        return yaml[Rails.env]
-      end.call
+      unless self.class.customized_config.nil?
+        self.class.customized_config
+      else
+        CONFIG[self.name] ||= lambda do
+          require 'yaml'
+          filename = "#{Rails.root}/config/oauth/#{self.name}.yml"
+          file     = File.open(filename)
+          yaml     = YAML.load(file)
+          return yaml[Rails.env]
+        end.call
+      end
     end
 
     def authorize_url
