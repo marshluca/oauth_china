@@ -35,8 +35,12 @@ module OauthChina
       request_token.params[:oauth_token]
     end
 
-    def consumer
-      @consumer ||= ::OAuth::Consumer.new(key, secret, consumer_options)
+    def consumer(force_reload = false)
+      if force_reload || !@consumer
+        @consumer = ::OAuth::Consumer.new(key, secret, consumer_options)
+      end
+
+      @consumer
     end
 
     def self.load(data)
