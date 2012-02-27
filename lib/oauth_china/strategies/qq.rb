@@ -110,7 +110,7 @@ module OauthChina
     end
 
 
-    def upload_image(content, image_path, options = {})
+    def upload_image(content, file, options = {})
       # /api/t/add_pic can only be accessed via http, not https
       self.consumer_options[:site] = "http://open.t.qq.com"
 
@@ -119,7 +119,7 @@ module OauthChina
       options.merge!({:clientip => '127.0.0.1',
         :content => content,
         :format => 'json',
-        :pic => File.open(image_path, 'rb')
+        :pic => file
       })
 
       # reload consumer for the :site change (https -> http)
